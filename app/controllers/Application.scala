@@ -20,6 +20,22 @@ object Application extends Controller {
     Ok(views.html.index("Your new application is ready."))
   }
 
+  def login = Action {
+    Ok(views.html.login(newAccountForm))
+  }
+
+  def post_login = Action { implicit request =>
+    val (username, password) = newAccountForm.bindFromRequest.get
+    DB.withConnection { implicit connection =>
+      if (SQL("SELECT username, password FROM User")().exists(row =>
+        row[String]("username") == username && row[String]("password") == password)) {
+        Ok("hello, " + username)
+      } else {
+        Ok("login failed") // 原義的にはauthentication failed(401だっけ)にするべき？
+      }
+    }
+  }
+
   def new_account = Action {
     Ok(views.html.new_account(newAccountForm))
   }

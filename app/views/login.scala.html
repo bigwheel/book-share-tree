@@ -1,0 +1,9 @@
+@(myForm: Form[(String, String)])
+
+@main("login") {
+    @helper.form(action = routes.Application.post_login) {
+        @helper.inputText(myForm("username"))
+        @helper.inputPassword(myForm("password"))
+        <button type="submit" name="action" value="edit">Login</button>
+    }
+}

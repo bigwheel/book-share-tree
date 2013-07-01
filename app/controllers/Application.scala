@@ -16,8 +16,16 @@ object Application extends Controller {
     )
   )
 
-  def index = Action {
-    Ok(views.html.index("Your new application is ready."))
+  def index = Action { implicit request =>
+    session.get("username").map { username =>
+      Ok(views.html.index("hello, " + username))
+    }.getOrElse {
+      Ok(views.html.index("You are not login yet"))
+    }
+  }
+
+  def logout = Action {
+    Ok("logouted").withNewSession
   }
 
   def login = Action {
@@ -29,7 +37,7 @@ object Application extends Controller {
     DB.withConnection { implicit connection =>
       if (SQL("SELECT username, password FROM User")().exists(row =>
         row[String]("username") == username && row[String]("password") == password)) {
-        Ok("hello, " + username)
+        Ok("hello, " + username).withSession("username" -> username)
       } else {
         Ok("login failed") // 原義的にはauthentication failed(401だっけ)にするべき？
       }

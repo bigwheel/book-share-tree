@@ -4,6 +4,7 @@
 
 # Home page
 GET     /                           controllers.Application.index
+POST    /post_new_account           controllers.Application.post_new_account
 GET     /new_account                controllers.Application.new_account
 
 # Map static resources from the /public folder to the /assets URL path

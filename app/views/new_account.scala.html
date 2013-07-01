@@ -1,5 +1,9 @@
-@()
+@(myForm: Form[(String, String)])
 
 @main("create new account") {
-test
+@helper.form(action = routes.Application.post_new_account) {
+        @helper.inputText(myForm("username"))
+        @helper.inputPassword(myForm("password"))
+        <button type="submit" name="action" value="edit">Edit order</button>
+    }
 }
